@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enterprise Retail System</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="app-layout">
+        <!-- Menú Lateral / Sidebar -->
+        <aside class="sidebar">
+            <div class="brand">
+                <div class="brand-logo">R</div>
+                <h2>Retail Suite</h2>
+            </div>
+            <nav class="nav-menu">
+                <button class="nav-btn active" data-tab="tab-dashboard">📊 Dashboard</button>
+                <button class="nav-btn" data-tab="tab-categorias">🏷️ Categorías</button>
+                <button class="nav-btn" data-tab="tab-empleados">🏆 Empleados del Mes</button>
+                <button class="nav-btn" data-tab="tab-roles">🔐 Roles y Permisos</button>
+                <button class="nav-btn" data-tab="tab-contacto">📞 Contacto / Soporte</button>
+            </nav>
+            <div class="user-badge">
+                <p><strong>Admin General</strong></p>
+                <small>Rol: Administrador</small>
+            </div>
+        </aside>
+
+        <!-- Contenido Principal -->
+        <main class="main-content">
+            
+            <!-- Pestaña 1: Dashboard Analítico -->
+            <section id="tab-dashboard" class="tab-content active">
+                <header class="tab-header">
+                    <h1>Panel General de Rendimiento</h1>
+                </header>
+                
+                <section class="filter-card">
+                    <div class="filter-grid">
+                        <div class="filter-group">
+                            <label for="categoria">Categoría</label>
+                            <select id="categoria">
+                                <option value="">Todas las categorías</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label for="fecha_inicio">Desde</label>
+                            <input type="date" id="fecha_inicio">
+                        </div>
+                        <div class="filter-group">
+                            <label for="fecha_fin">Hasta</label>
+                            <input type="date" id="fecha_fin">
+                        </div>
+                        <div style="display: flex; gap: 8px;">
+                            <button class="btn-primary" id="btnFiltrar">Aplicar Filtros</button>
+                            <button class="btn-secondary" id="btnLimpiar">Limpiar</button>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="kpi-grid">
+                    <div class="kpi-card">
+                        <div class="kpi-title">Ingresos Totales</div>
+                        <div class="kpi-value" id="totalIngresos">$0.00</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-title">Transacciones</div>
+                        <div class="kpi-value" id="totalVentas">0</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-title">Ticket Promedio</div>
+                        <div class="kpi-value" id="ticketPromedio">$0.00</div>
+                    </div>
+                </section>
+
+                <section class="main-grid">
+                    <div class="content-card">
+                        <h2 class="card-title">Ventas por Categoría</h2>
+                        <canvas id="graficoVentas" height="120"></canvas>
+                    </div>
+                    <div class="content-card">
+                        <h2 class="card-title">Últimas Operaciones</h2>
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Fecha</th>
+                                        <th>Categoría</th>
+                                        <th>Monto</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tablaVentas"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+            </section>
+
+            <!-- Pestaña 2: Gestión de Categorías -->
+            <section id="tab-categorias" class="tab-content">
+                <header class="tab-header">
+                    <h1>Gestión de Categorías</h1>
+                </header>
+                <div class="content-card">
+                    <h2 class="card-title">Agregar Nueva Categoría</h2>
+                    <form id="formNuevaCategoria" style="display: flex; gap: 12px; margin-bottom: 24px;">
+                        <input type="text" id="nombreCategoria" placeholder="Ej: Ferretería, Iluminación..." required style="flex: 1; padding: 10px; border-radius: 8px; border: 1px solid var(--border);">
+                        <button type="submit" class="btn-primary">Guardar Categoría</button>
+                    </form>
+                    <h2 class="card-title">Categorías Activas</h2>
+                    <ul id="listaCategoriasCrud" style="list-style: none; display: flex; flex-direction: column; gap: 8px;"></ul>
+                </div>
+            </section>
+
+            <!-- Pestaña 3: Empleados del Mes -->
+            <section id="tab-empleados" class="tab-content">
+                <header class="tab-header">
+                    <h1>Ranking de Vendedores</h1>
+                </header>
+                <div class="content-card">
+                    <h2 class="card-title">Top Empleados del Mes</h2>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Posición</th>
+                                    <th>Empleado</th>
+                                    <th>Ventas Totales</th>
+                                    <th>Monto Recaudado</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>🥇 1°</td><td>Carlos Mendoza</td><td>84</td><td>$12,450.00</td></tr>
+                                <tr><td>🥈 2°</td><td>Ana Rodríguez</td><td>62</td><td>$9,820.00</td></tr>
+                                <tr><td>🥉 3°</td><td>José Gómez</td><td>51</td><td>$7,110.00</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Pestaña 4: Roles y Permisos -->
+            <section id="tab-roles" class="tab-content">
+                <header class="tab-header">
+                    <h1>Control de Accesos y Roles</h1>
+                </header>
+                <div class="content-card">
+                    <h2 class="card-title">Usuarios Registrados</h2>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Usuario</th>
+                                    <th>Rol</th>
+                                    <th>Estado</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>admin@empresa.com</td><td><span style="background: #dbeafe; color: #1e40af; padding: 4px 8px; border-radius: 4px; font-weight: 600;">Super Admin</span></td><td>Activo</td><td>--</td></tr>
+                                <tr><td>gerente@empresa.com</td><td><span style="background: #fef3c7; color: #92400e; padding: 4px 8px; border-radius: 4px; font-weight: 600;">Gerente</span></td><td>Activo</td><td><button class="btn-secondary">Editar</button></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Pestaña 5: Contacto / Soporte -->
+            <section id="tab-contacto" class="tab-content">
+                <header class="tab-header">
+                    <h1>Información de Contacto y Soporte Técnico</h1>
+                </header>
+                <div class="content-card">
+                    <h2 class="card-title">Atención Corporativa</h2>
+                    <p style="margin-bottom: 12px;">Para soporte técnico, reporte de fallas o licencias adicionales:</p>
+                    <ul style="line-height: 1.8; color: var(--text-muted);">
+                        <li>📧 <strong>Correo:</strong> soporte@retailanalytics.com</li>
+                        <li>📞 <strong>Teléfono:</strong> +58 800-RETAIL (738245)</li>
+                        <li>🏢 <strong>Oficina Central:</strong> Departamento de Sistemas / TI</li>
+                    </ul>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <script src="/static/dashboard.js"></script>
+</body>
+</html>
