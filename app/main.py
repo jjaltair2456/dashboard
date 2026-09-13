@@ -12,15 +12,23 @@ from pydantic import BaseModel
 from app.database import Base, engine, get_db
 from app.models import Venta, Empleado, Rol, Categoria
 
-# Apunta a la carpeta app/ donde residen static y templates
-BASE_DIR = Path(__file__).resolve().parent
+# Detección inteligente de directorios para Vercel
+APP_DIR = Path(__file__).resolve().parent
+ROOT_DIR = APP_DIR.parent
+
+if (APP_DIR / "static").exists():
+    STATIC_DIR = APP_DIR / "static"
+    TEMPLATES_DIR = APP_DIR / "templates"
+else:
+    STATIC_DIR = ROOT_DIR / "static"
+    TEMPLATES_DIR = ROOT_DIR / "templates"
 
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="Enterprise Retail API")
 
-app.mount("/static", StaticFiles(directory=BASE_DIR / "static"), name="static")
-templates = Jinja2Templates(directory=BASE_DIR / "templates")
+app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
+templates = Jinja2Templates(directory=TEMPLATES_DIR)
 
 # --- Esquemas Pydantic ---
 class RolSchema(BaseModel):
