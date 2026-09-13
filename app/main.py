@@ -12,7 +12,8 @@ from pydantic import BaseModel
 from app.database import Base, engine, get_db
 from app.models import Venta, Empleado, Rol, Categoria
 
-BASE_DIR = Path(__file__).resolve().parent.parent
+# Apunta a la carpeta app/ donde residen static y templates
+BASE_DIR = Path(__file__).resolve().parent
 
 Base.metadata.create_all(bind=engine)
 
@@ -54,7 +55,7 @@ class CategoriaCreate(BaseModel):
 def read_root(request: Request):
     return templates.TemplateResponse(request=request, name="index.html")
 
-# --- Categorías (Única definición) ---
+# --- Categorías ---
 @app.get("/api/v1/categorias")
 def obtener_categorias(db: Session = Depends(get_db)):
     cats_db = [c.nombre for c in db.query(Categoria).all()]
